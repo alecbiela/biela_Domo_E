@@ -9,6 +9,7 @@ const makeDomo = (req, res) => {
   const domoData = {
     name: req.body.name,
     age: req.body.age,
+    color: req.body.color,
     owner: req.session.account._id,
   };
 
@@ -28,6 +29,17 @@ const makeDomo = (req, res) => {
   });
 
   return domoPromise;
+};
+
+const removeDomo = (req, res) => {
+  Domo.DomoModel.removeDomo(req.session.account._id, req.body.name, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'An Error Occurred' });
+    }
+
+    return res.json({ redirect: '/getDomos' });
+  });
 };
 
 const makerPage = (req, res) => {
@@ -58,3 +70,4 @@ const getDomos = (request, response) => {
 module.exports.make = makeDomo;
 module.exports.makerPage = makerPage;
 module.exports.getDomos = getDomos;
+module.exports.removeDomo = removeDomo;
